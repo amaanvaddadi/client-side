@@ -1,17 +1,29 @@
-var xhr = require('xhr')
-var greeting = require('./views/greeting.hbs')
+'use strict';
 
-var endpoint = 'https://api.wheretheiss.at/v1/satellites'
+const xhr = require('xhr')
+const greeting = require('./views/greeting.hbs')
+const endpoint = 'https://api.wheretheiss.at/v1/satellites';
+import { satnav } from './babel'
 
-xhr.get(endpoint, function (err, data) {
+satnav()
+
+// babel()
+
+xhr.get(endpoint, (err, data) => {
   if (err) {
     console.error(err)
   }
+  const satData = JSON.parse(data.body);
+    console.log(satData)
 
-  // In case you're curious
-  console.log(data.body) // FYI: data.body is a string
+  const target = document.querySelector('#nameData')
+    target.innerHTML = greeting({name: satData[0].name})
 
-  // Replace 'Space' below with the response
-  var target = document.getElementsByTagName('main')[0]
-  target.innerHTML = greeting({name: 'Space'})
+  // const clickButton = document.querySelector('#add');
+  // clickButton.addEventListener('click', (display) => {
+  //     const divTarget = document.querySelector('#clickData')
+  //     divTarget.innerHTML = greeting({name: satData[0].name, id: satData[0].id})
+  //
+  //   })
+
 })
